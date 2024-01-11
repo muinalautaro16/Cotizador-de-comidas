@@ -181,18 +181,75 @@ function actualizarResumen() {
     mesa.appendChild(mesaSpan);
     hora.appendChild(horaSpan);
 
-    // Iterar sobre el array de pedidos
-
-
     // Titulo de la seccion
     const heading = document.createElement('H3');
     heading.textContent = 'Platillos consumidos';
     heading.classList.add('my-4', 'text-center');
 
+
+    // Iterar sobre el array de pedidos
+    const grupo = document.createElement('UL');
+    grupo.classList.add('list-group');
+
+    const { pedido } = cliente;
+    pedido.forEach( articulo => {
+        const { nombre,cantidad,precio, id} = articulo;
+
+        const lista = document.createElement('LI');
+        lista.classList.add('list-group-items');
+
+        const nombreEl = document.createElement('H4');
+        nombreEl.classList.add('my-4');
+        nombreEl.textContent = nombre;
+
+        // Cantidad del articulo
+        const cantidadEl = document.createElement('P');
+        cantidadEl.classList.add('fw-bold');
+        cantidadEl.textContent = 'Cantidad: ';
+
+        const cantidadValor = document.createElement('SPAN');
+        cantidadValor.classList.add('fw-normal');
+        cantidadValor.textContent = cantidad;
+
+        // precio del articulo
+        const precioEl = document.createElement('P');
+        precioEl.classList.add('fw-bold');
+        precioEl.textContent = 'Precio: ';
+        
+        const precioValor = document.createElement('SPAN');
+        precioValor.classList.add('fw-normal');
+        precioValor.textContent = `$${precio}`;
+
+        // subtotal del articulo
+        const subtotalEl = document.createElement('P');
+        subtotalEl.classList.add('fw-bold');
+        subtotalEl.textContent = 'Subtotal: ';
+        
+        const subtotalValor = document.createElement('SPAN');
+        subtotalValor.classList.add('fw-normal');
+        subtotalValor.textContent = calcularSubtotal(precio, cantidad ) ;
+
+        // agregar valores a sus contenedores
+        cantidadEl.appendChild(cantidadValor)
+        precioEl.appendChild(precioValor)
+        subtotalEl.appendChild(subtotalValor)
+
+        // Agregar elementos al LI
+        lista.appendChild(nombreEl);
+        lista.appendChild(cantidadEl);
+        lista.appendChild(precioEl);
+        lista.appendChild(subtotalEl);
+
+        // Agregar lista al grupo principal
+        grupo.appendChild(lista);
+    });
+
+    
     // Agregar al contenido
     resumen.appendChild(mesa);
     resumen.appendChild(hora);
     resumen.appendChild(heading);
+    resumen.appendChild(grupo);
 
     contenido.appendChild(resumen);
 
@@ -204,4 +261,8 @@ function limpiarHTML() {
     while( contenido.firstChild ) {
         contenido.removeChild(contenido.firstChild);
     }
+}
+
+function calcularSubtotal(precio, cantidad) {
+    return `$ ${precio * cantidad} `;
 }
